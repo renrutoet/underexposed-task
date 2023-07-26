@@ -19,7 +19,7 @@ export const convertStringToHTML = (htmlString: string): any => {
 
 export const templateToElement = (
     templateRenderer: (data: TemplateData) => Template,
-    data: TemplateData
+    data?: TemplateData
 ): HTMLElement => {
     return convertStringToHTML(templateRenderer(data));
 };
@@ -82,7 +82,7 @@ export const viewPageRenderer = (pageData: any): Template => {
         <div class="fastest-lap">
           <div class="title">FASTEST LAP</div>
           <div class="details">
-            <div class="icon">STOP</div>
+            <img src="./stopwatch.svg" alt="stopwatch icon" />
             <div class="time">${pageData.lap.time}</div>
             <div class="name font-goldman">${pageData.lap.name}</div>
           </div>
@@ -96,7 +96,7 @@ export const viewPageRenderer = (pageData: any): Template => {
 export const pageHeaderRenderer = (): Template => {
     return `
     <div class="page__header font-goldman">
-      <div>IMAGE</div>
+      <img src="./f1-logo.svg" alt="formula one logo" />
       <div>2022 SEASON</div>
     </div>
         ` as Template;

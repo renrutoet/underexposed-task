@@ -65,10 +65,10 @@
 }
 
 .title {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     text-align: left;
-    font-size: 0.8rem;
     color: rgba(0, 0, 0, 0.3);
+    margin-block: 0.25rem;
 }
 
 .navbar {

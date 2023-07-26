@@ -10,8 +10,10 @@ import {
 export const renderApp = (): any => {
     console.log("rendering");
     const containerElement = document.createElement("div");
+    containerElement.classList.add("full-width");
     const renderCards = renderCardList(testData);
 
+    containerElement.appendChild(templateToElement(pageHeaderRenderer));
     renderCards.forEach((card) => {
         containerElement.appendChild(card);
     });
