@@ -1,10 +1,12 @@
 import "./style.css";
 import "./styles/card.css";
+import "./styles/viewPage.css";
 import "@fontsource/goldman";
 import "@fontsource-variable/plus-jakarta-sans";
-import { F1CardProps, renderCardList } from "./renderUtils/f1Card";
+import { renderApp } from "./renderUtils/rendering";
+import { F1TemplateData } from "./renderUtils/templates";
 
-const testData: F1CardProps[] = [
+export const testData = [
     {
         round: "Round 1",
         dates: "25-27 MAR",
@@ -19,10 +21,13 @@ const testData: F1CardProps[] = [
         country: "AUSTRALIA",
         series: "FORMULA 1 HEINEKEN AUSTRALIAN GRAND PRIX 2022",
     },
-];
+    {
+        round: "Round 2",
+        dates: "08-10 APR",
+        flag: "FLAG",
+        country: "AUSTRALIA",
+        series: "FORMULA 1 HEINEKEN AUSTRALIAN GRAND PRIX 2022",
+    },
+] as F1TemplateData[];
 
-const renderApp = (data: F1CardProps[]): string => {
-    return renderCardList(data);
-};
-
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = renderApp(testData);
+renderApp();
