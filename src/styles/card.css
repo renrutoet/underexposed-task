@@ -1,0 +1,75 @@
+.card {
+    height: 200px;
+    width: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 25%;
+    background-color: white;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+
+    font-family: "Plus Jakarta Sans Variable", sans-serif;
+    font-weight: 500;
+}
+
+.header {
+    position: relative;
+    border-bottom: 1px solid red;
+    overflow: hidden;
+    color: red;
+}
+
+.header__skew {
+    position: absolute;
+    left: -60%;
+    padding: 1rem;
+    height: 100%;
+    width: 100%;
+    transform: skew(-45deg, 0deg);
+    background-color: red;
+}
+
+.header__content {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+}
+
+.header__round {
+    display: block;
+    height: 100%;
+    font-family: "Goldman", cursive;
+    color: white;
+}
+
+/* .header__dates {
+} */
+
+.card__body {
+    padding: 1rem;
+    color: black;
+}
+
+.card__body__country__container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.card__body__country__flag {
+    padding-right: 0.5rem;
+}
+.card__body__country__name {
+    color: grey;
+}
+
+.card__body__series__container {
+    padding-top: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card__body__series__title {
+    text-align: left;
+    font-family: "Goldman", cursive;
+}
