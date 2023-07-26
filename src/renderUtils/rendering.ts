@@ -2,6 +2,7 @@ import { testData } from "../main";
 import {
     F1TemplateData,
     f1CardRenderer,
+    pageHeaderRenderer,
     templateToElement,
     viewPageRenderer,
 } from "./templates";
@@ -21,9 +22,23 @@ export const renderApp = (): any => {
 };
 
 const renderViewPage = (cardData: any) => {
+    const mockSeriesData = {
+        winner: { name: "MAX VERSTAPPEN", laps: "50" },
+        top: ["MAX VERSTAPPEN", "CHARLES LECLERC", "CARLOS SAINZ"],
+        lap: { time: "1:31.634", name: "MAX VERSTAPPEN" },
+    };
+
+    const data = { ...mockSeriesData, cardData };
+
+    const targetElement = document.createElement("div");
+    targetElement.classList.add("full-width");
+
+    targetElement.appendChild(templateToElement(pageHeaderRenderer, data));
+    targetElement.appendChild(templateToElement(viewPageRenderer, data));
+
     document
         .querySelector<HTMLDivElement>("#app")!
-        .replaceChildren(templateToElement(viewPageRenderer, cardData));
+        .replaceChildren(targetElement);
 
     document.querySelector("#back-button")?.addEventListener("click", () => {
         renderApp();

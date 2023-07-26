@@ -28,6 +28,20 @@ export const testData = [
         country: "AUSTRALIA",
         series: "FORMULA 1 HEINEKEN AUSTRALIAN GRAND PRIX 2022",
     },
+    {
+        round: "Round 2",
+        dates: "08-10 APR",
+        flag: "FLAG",
+        country: "AUSTRALIA",
+        series: "FORMULA 1 HEINEKEN AUSTRALIAN GRAND PRIX 2022",
+    },
+    {
+        round: "Round 2",
+        dates: "08-10 APR",
+        flag: "FLAG",
+        country: "AUSTRALIA",
+        series: "FORMULA 1 HEINEKEN AUSTRALIAN GRAND PRIX 2022",
+    },
 ] as F1TemplateData[];
 
 renderApp();

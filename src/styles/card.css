@@ -37,7 +37,6 @@
         .round {
             display: block;
             height: 100%;
-            font-family: "Goldman", cursive;
             color: white;
         }
     }
@@ -66,7 +65,6 @@
 
             .title {
                 text-align: left;
-                font-family: "Goldman", cursive;
             }
         }
     }
