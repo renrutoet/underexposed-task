@@ -123,11 +123,11 @@ export const viewPageRenderer = (pageData: any): Template => {
 
 export const pageHeaderRenderer = (seasonYear): Template => {
     return `
-    <div>
+    <div id="header__container">
       <div class="page__header font-goldman">
         <img src="./f1-logo.svg" alt="formula one logo" />
-        <div class="season__container">
-          <button class="arrow-icon" id="season-button"><img  src="./arrow-circle.svg" alt="arrow icon"/></button>
+        <div class="season__container" id="season-button">
+          <img class="arrow-icon" src="./arrow-circle.svg" alt="arrow icon"/>
           <div>${seasonYear} SEASON</div>
         </div>
       </div>
