@@ -123,10 +123,8 @@ export const pageHeaderRenderer = (): Template => {
 export const navButtonsRenderer = (): Template => {
     return `
     <div class="navbar">
-      
       <button id="back-button"><img src="./arrow.svg" alt="arrow icon" class="arrow"> BACK </button>
       <button id="next-button"> NEXT ROUND <img src="./arrow.svg" alt="arrow icon" class="arrow right"></button>
-      
     </div>
         ` as Template;
 };

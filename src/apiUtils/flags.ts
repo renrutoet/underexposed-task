@@ -1,11 +1,9 @@
 export const getFlagCountryCodes = async () => {
     let flagCodeData = sessionStorage.getItem("flagCodes");
-
     if (!flagCodeData) {
         try {
             const response = await fetch("https://flagcdn.com/en/codes.json");
             flagCodeData = await response.json();
-
             if (flagCodeData) {
                 sessionStorage.setItem(
                     "flagCodes",
@@ -15,10 +13,11 @@ export const getFlagCountryCodes = async () => {
         } catch (e) {
             console.error(e);
         }
+        return flagCodeData;
+    } else {
+        const parsedData = flagCodeData && JSON.parse(flagCodeData);
+        return parsedData;
     }
-
-    const parsedData = flagCodeData && JSON.parse(flagCodeData);
-    return parsedData;
 };
 
 export const getCountryFlag = async (countryCode: string) => {
