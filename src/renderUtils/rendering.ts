@@ -1,3 +1,8 @@
+import {
+    getCountryFlag,
+    getCurrentCountryCode,
+    getFlagCountryCodes,
+} from "../apiUtils/flags";
 import { testData } from "../main";
 import {
     F1TemplateData,
@@ -7,12 +12,14 @@ import {
     viewPageRenderer,
 } from "./templates";
 
-export const renderApp = (): any => {
+export const renderApp = async (): Promise<void> => {
     const containerElement = document.createElement("div");
     containerElement.classList.add("full-width");
-    const renderCards = renderCardList(testData);
+    const renderCards = await renderCardList(testData);
     const cardListContainerElement = document.createElement("div");
     cardListContainerElement.classList.add("card-list__container");
+
+    await getFlagCountryCodes();
 
     containerElement.appendChild(templateToElement(pageHeaderRenderer));
     renderCards.forEach((card) => {
@@ -26,7 +33,7 @@ export const renderApp = (): any => {
         .replaceChildren(containerElement);
 };
 
-const renderViewPage = (cardData: any) => {
+const renderViewPage = async (cardData: any): Promise<void> => {
     const mockSeriesData = {
         winner: { name: "MAX VERSTAPPEN", laps: "50" },
         top: ["MAX VERSTAPPEN", "CHARLES LECLERC", "CARLOS SAINZ"],
@@ -41,6 +48,8 @@ const renderViewPage = (cardData: any) => {
     targetElement.appendChild(templateToElement(pageHeaderRenderer, data));
     targetElement.appendChild(templateToElement(viewPageRenderer, data));
 
+    await updateCardWithFlag(targetElement, cardData);
+
     document
         .querySelector<HTMLDivElement>("#app")!
         .replaceChildren(targetElement);
@@ -50,15 +59,35 @@ const renderViewPage = (cardData: any) => {
     });
 };
 
-export const renderCardList = (dataArr: F1TemplateData[]): any[] => {
-    const result = dataArr.map((cardData) => {
-        const newCardElement = templateToElement(f1CardRenderer, cardData);
+export const renderCard = async (cardData) => {
+    const newCardElement = templateToElement(f1CardRenderer, cardData);
 
-        newCardElement.addEventListener("click", () => {
-            console.log(cardData.country);
-            renderViewPage(cardData);
-        });
-        return newCardElement;
+    await updateCardWithFlag(newCardElement, cardData);
+
+    newCardElement.addEventListener("click", async () => {
+        await renderViewPage(cardData);
     });
+    return newCardElement;
+};
+
+export const updateCardWithFlag = async (cardElement, cardData) => {
+    const currentCountryCode = await getCurrentCountryCode(cardData.country);
+    const countryFlag = await getCountryFlag(currentCountryCode);
+
+    const flagElement = cardElement.querySelector(".flag");
+
+    if (flagElement) {
+        !flagElement.appendChild(countryFlag);
+    }
+};
+
+export const renderCardList = async (
+    dataArr: F1TemplateData[]
+): Promise<any[]> => {
+    const result = await Promise.all(
+        dataArr.map(async (cardData) => {
+            return await renderCard(cardData);
+        })
+    );
     return result;
 };

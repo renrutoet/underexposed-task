@@ -25,7 +25,7 @@ export const templateToElement = (
 };
 
 export const f1CardRenderer = (
-    { round, dates, flag, country, series }: F1TemplateData,
+    { round, dates, country, series }: F1TemplateData,
     forHomepage: boolean = true
 ): Template => {
     if (forHomepage) {
@@ -40,7 +40,7 @@ export const f1CardRenderer = (
   </div>
   <div class="body">
       <div class="country">
-        <div class="flag">${flag}</div>
+        <div class="flag"></div>
         <div class="name">${country}</div>
       </div>
       <div class="series">
@@ -61,7 +61,7 @@ export const f1CardRenderer = (
             </div>
             <div class="body">
                 <div class="country">
-                  <div class="flag">${flag}</div>
+                  <div class="flag"></div>
                   <div class="name">${country}</div>
                 </div>
                 <div class="series">
