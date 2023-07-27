@@ -121,11 +121,20 @@ export const viewPageRenderer = (pageData: any): Template => {
         ` as Template;
 };
 
-export const pageHeaderRenderer = (): Template => {
+export const pageHeaderRenderer = (seasonYear): Template => {
     return `
-    <div class="page__header font-goldman">
-      <img src="./f1-logo.svg" alt="formula one logo" />
-      <div>2022 SEASON</div>
+    <div>
+      <div class="page__header font-goldman">
+        <img src="./f1-logo.svg" alt="formula one logo" />
+        <div class="season__container">
+          <button class="arrow-icon" id="season-button"><img  src="./arrow-circle.svg" alt="arrow icon"/></button>
+          <div>${seasonYear} SEASON</div>
+        </div>
+      </div>
+      <div class="search__container hidden">
+        <input type="text" class="search__input hidden" aria-hidden></input>
+        <button class="search__button hidden" aria-hidden>Change Season</button>
+      </div>
     </div>
         ` as Template;
 };

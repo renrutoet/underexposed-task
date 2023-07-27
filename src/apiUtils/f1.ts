@@ -2,7 +2,9 @@ export const getSeasonData = async (seasonYear = "2022") => {
     let seasonData = sessionStorage.getItem(`season-${seasonYear}`);
 
     if (!seasonData) {
-        const response = await fetch("http://ergast.com/api/f1/2022.json");
+        const response = await fetch(
+            `http://ergast.com/api/f1/${seasonYear}.json`
+        );
         const data = await response.json();
 
         seasonData = data.MRData.RaceTable;
@@ -38,6 +40,26 @@ export const getRoundResults = async (raceData) => {
     }
 };
 
+export const getFastestLapTime = async (roundResults) => {
+    const sessionKey = `${roundResults.season}-round-${roundResults.round}-fastest-time`;
+    let roundData = sessionStorage.getItem(sessionKey);
+
+    if (!roundData) {
+        const response = await fetch(
+            `http://ergast.com/api/f1/${roundResults.season}/${roundResults.round}/fastest/1/results.json`
+        );
+        const data = await response.json();
+
+        const fastestResult = data.MRData.RaceTable.Races[0].Results[0];
+        sessionStorage.setItem(sessionKey, JSON.stringify(fastestResult));
+
+        return fastestResult;
+    } else {
+        const parsedData = roundData && JSON.parse(roundData);
+        return parsedData;
+    }
+};
+
 export const getPageDetails = async (roundResults: Record<string, any>) => {
     const top3Results = roundResults.Races[0].Results.slice(0, 3);
 
@@ -52,12 +74,7 @@ export const getPageDetails = async (roundResults: Record<string, any>) => {
     });
 
     if (!fastestResult) {
-        const response = await fetch(
-            `http://ergast.com/api/f1/${roundResults.season}/${roundResults.round}/fastest/1/results.json`
-        );
-        const data = await response.json();
-
-        fastestResult = data.MRData.RaceTable.Races[0].Results[0];
+        fastestResult = await getFastestLapTime(roundResults);
     }
 
     const fastestTime = fastestResult.FastestLap.Time.time;

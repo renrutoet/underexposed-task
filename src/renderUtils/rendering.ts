@@ -13,24 +13,43 @@ import {
 import nationalities from "i18n-nationality";
 import english from "i18n-nationality/langs/en.json";
 
-export const renderApp = async (): Promise<void> => {
-    const seasonData = await getSeasonData();
-
-    const cards = await renderCardList(seasonData);
+export const renderApp = async (seasonYear = "2021"): Promise<void> => {
+    const seasonData = await getSeasonData(seasonYear);
+    await getFlagCountryCodes();
 
     const containerElement = document.createElement("div");
     containerElement.classList.add("full-width");
+
+    const headerElement = templateToElement(pageHeaderRenderer, seasonYear);
+    containerElement.appendChild(headerElement);
+
     const cardListContainerElement = document.createElement("div");
     cardListContainerElement.classList.add("card-list__container");
 
-    await getFlagCountryCodes();
-
-    containerElement.appendChild(templateToElement(pageHeaderRenderer));
+    const cards = await renderCardList(seasonData);
     cards.forEach((card) => {
         cardListContainerElement.appendChild(card);
     });
-
     containerElement.appendChild(cardListContainerElement);
+
+    const seasonButton = containerElement.querySelector("#season-button");
+    const search = containerElement.querySelector(".search__container");
+
+    seasonButton?.addEventListener("click", () => {
+        search?.classList.toggle("hidden");
+        const searchInput = headerElement?.querySelector(".search__input");
+        const searchButton = headerElement?.querySelector(".search__button");
+
+        searchInput?.classList.toggle("hidden");
+        searchInput?.toggleAttribute("aria-hidden");
+
+        searchButton?.classList.toggle("hidden");
+        searchButton?.toggleAttribute("aria-hidden");
+
+        searchButton?.addEventListener("click", () => {
+            renderApp(searchInput?.value);
+        });
+    });
 
     document
         .querySelector<HTMLDivElement>("#app")!
@@ -74,17 +93,6 @@ const renderViewPage = async (raceData: any): Promise<void> => {
     window.scrollTo(0, 0);
 };
 
-export const renderCard = async (raceData) => {
-    const newCardElement = templateToElement(f1CardRenderer, raceData);
-
-    await updateCardWithFlag(newCardElement, raceData);
-
-    newCardElement.addEventListener("click", async () => {
-        await renderViewPage(raceData);
-    });
-    return newCardElement;
-};
-
 export const updateCardWithFlag = async (cardElement, raceData) => {
     const currentCountryCode = await getCurrentCountryCode(
         raceData.Circuit.Location.country
@@ -120,6 +128,17 @@ export const updateWinnerWithFlag = async (targetElement, winnerDetails) => {
     if (flagElement) {
         !flagElement.appendChild(countryFlag);
     }
+};
+
+export const renderCard = async (raceData) => {
+    const newCardElement = templateToElement(f1CardRenderer, raceData);
+
+    await updateCardWithFlag(newCardElement, raceData);
+
+    newCardElement.addEventListener("click", async () => {
+        await renderViewPage(raceData);
+    });
+    return newCardElement;
 };
 
 export const renderCardList = async (seasonData: any): Promise<any[]> => {
