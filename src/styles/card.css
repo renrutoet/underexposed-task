@@ -44,6 +44,10 @@
             display: flex;
             justify-content: space-between;
             padding: 0.5rem;
+
+            .dates {
+                text-transform: uppercase;
+            }
         }
 
         .round {
@@ -56,6 +60,7 @@
     .body {
         padding: 1rem;
         color: black;
+        text-transform: uppercase;
 
         .country {
             display: flex;
@@ -79,7 +84,7 @@
 
         .series {
             padding-top: 0.5rem;
-            font-size: 0.8rem;
+            font-size: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;

@@ -1,28 +1,32 @@
+import { getPageDetails, getRoundResults, getSeasonData } from "../apiUtils/f1";
 import {
     getCountryFlag,
     getCurrentCountryCode,
     getFlagCountryCodes,
 } from "../apiUtils/flags";
-import { testData } from "../main";
 import {
-    F1TemplateData,
     f1CardRenderer,
     pageHeaderRenderer,
     templateToElement,
     viewPageRenderer,
 } from "./templates";
+import nationalities from "i18n-nationality";
+import english from "i18n-nationality/langs/en.json";
 
 export const renderApp = async (): Promise<void> => {
+    const seasonData = await getSeasonData();
+
+    const cards = await renderCardList(seasonData);
+
     const containerElement = document.createElement("div");
     containerElement.classList.add("full-width");
-    const renderCards = await renderCardList(testData);
     const cardListContainerElement = document.createElement("div");
     cardListContainerElement.classList.add("card-list__container");
 
     await getFlagCountryCodes();
 
     containerElement.appendChild(templateToElement(pageHeaderRenderer));
-    renderCards.forEach((card) => {
+    cards.forEach((card) => {
         cardListContainerElement.appendChild(card);
     });
 
@@ -33,14 +37,12 @@ export const renderApp = async (): Promise<void> => {
         .replaceChildren(containerElement);
 };
 
-const renderViewPage = async (cardData: any): Promise<void> => {
-    const mockSeriesData = {
-        winner: { name: "MAX VERSTAPPEN", laps: "50" },
-        top: ["MAX VERSTAPPEN", "CHARLES LECLERC", "CARLOS SAINZ"],
-        lap: { time: "1:31.634", name: "MAX VERSTAPPEN" },
-    };
+const renderViewPage = async (raceData: any): Promise<void> => {
+    const roundResults = await getRoundResults(raceData);
 
-    const data = { ...mockSeriesData, cardData };
+    const details = await getPageDetails(roundResults);
+
+    const data = { ...details, raceData };
 
     const targetElement = document.createElement("div");
     targetElement.classList.add("full-width");
@@ -48,7 +50,8 @@ const renderViewPage = async (cardData: any): Promise<void> => {
     targetElement.appendChild(templateToElement(pageHeaderRenderer, data));
     targetElement.appendChild(templateToElement(viewPageRenderer, data));
 
-    await updateCardWithFlag(targetElement, cardData);
+    await updateCardWithFlag(targetElement, raceData);
+    await updateWinnerWithFlag(targetElement, details);
 
     document
         .querySelector<HTMLDivElement>("#app")!
@@ -57,21 +60,25 @@ const renderViewPage = async (cardData: any): Promise<void> => {
     document.querySelector("#back-button")?.addEventListener("click", () => {
         renderApp();
     });
+
+    window.scrollTo(0, 0);
 };
 
-export const renderCard = async (cardData) => {
-    const newCardElement = templateToElement(f1CardRenderer, cardData);
+export const renderCard = async (raceData) => {
+    const newCardElement = templateToElement(f1CardRenderer, raceData);
 
-    await updateCardWithFlag(newCardElement, cardData);
+    await updateCardWithFlag(newCardElement, raceData);
 
     newCardElement.addEventListener("click", async () => {
-        await renderViewPage(cardData);
+        await renderViewPage(raceData);
     });
     return newCardElement;
 };
 
-export const updateCardWithFlag = async (cardElement, cardData) => {
-    const currentCountryCode = await getCurrentCountryCode(cardData.country);
+export const updateCardWithFlag = async (cardElement, raceData) => {
+    const currentCountryCode = await getCurrentCountryCode(
+        raceData.Circuit.Location.country
+    );
     const countryFlag = await getCountryFlag(currentCountryCode);
 
     const flagElement = cardElement.querySelector(".flag");
@@ -81,12 +88,34 @@ export const updateCardWithFlag = async (cardElement, cardData) => {
     }
 };
 
-export const renderCardList = async (
-    dataArr: F1TemplateData[]
-): Promise<any[]> => {
+export const updateWinnerWithFlag = async (targetElement, winnerDetails) => {
+    nationalities.registerLocale(english);
+
+    const winnerNationality = winnerDetails.winner.nationality;
+    let winnerCountryCode = nationalities.getAlpha2Code(
+        winnerNationality,
+        "en"
+    );
+
+    if (winnerNationality === "Monegasque") {
+        winnerCountryCode = "mc";
+    }
+
+    const countryFlag = await getCountryFlag(winnerCountryCode.toLowerCase());
+
+    const flagElement = targetElement
+        .querySelector(".winner")
+        .querySelector(".flag");
+
+    if (flagElement) {
+        !flagElement.appendChild(countryFlag);
+    }
+};
+
+export const renderCardList = async (seasonData: any): Promise<any[]> => {
     const result = await Promise.all(
-        dataArr.map(async (cardData) => {
-            return await renderCard(cardData);
+        seasonData.Races.map(async (raceData) => {
+            return await renderCard(raceData);
         })
     );
     return result;

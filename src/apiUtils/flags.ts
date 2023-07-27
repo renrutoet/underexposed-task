@@ -52,9 +52,17 @@ export const getCountryFlag = async (countryCode: string) => {
 export const getCurrentCountryCode = async (currentCountryName) => {
     const countryCodes = await getFlagCountryCodes();
 
-    const currentCountry = Object.entries(countryCodes).find((key) => {
+    const edgeCaseCodes = { ...countryCodes, ae: "UAE", us: "USA", gb: "UK" };
+
+    let currentCountry = Object.entries(edgeCaseCodes).find((key) => {
         return key[1] === currentCountryName;
     });
+
+    if (!currentCountry[0]) {
+        currentCountry = Object.entries(countryCodes).find((key) => {
+            return key[1] === currentCountryName;
+        });
+    }
 
     return currentCountry[0];
 };

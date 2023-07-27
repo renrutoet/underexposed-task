@@ -25,17 +25,27 @@ export const templateToElement = (
 };
 
 export const f1CardRenderer = (
-    { round, dates, country, series }: F1TemplateData,
+    raceData: F1TemplateData,
     forHomepage: boolean = true
 ): Template => {
+    const { round, date, raceName } = raceData;
+
+    const firstPractiseDate = new Date(
+        raceData.FirstPractice.date
+    ).toLocaleString("default", { day: "numeric" });
+    const day = new Date(date).toLocaleString("default", { day: "numeric" });
+    const month = new Date(date).toLocaleString("default", { month: "short" });
+
+    const country = raceData.Circuit.Location.country;
+
     if (forHomepage) {
         return `
 <div class="card font-jakarta">
   <div class="header">
       <div  class="skew-background"></div>
       <div class="content"> 
-        <div class="round font-goldman">${round}</div>
-        <div  class="dates">${dates}</div>
+        <div class="round font-goldman">Round ${round}</div>
+        <div  class="dates">${firstPractiseDate}-${day} ${month}</div>
       </div>
   </div>
   <div class="body">
@@ -44,7 +54,7 @@ export const f1CardRenderer = (
         <div class="name">${country}</div>
       </div>
       <div class="series">
-        <div class="title font-goldman">${series}</div>
+        <div class="title font-goldman">${raceName}</div>
         <div class="arrow-icon"><img  src="./arrow-circle.svg" alt="arrow icon"/></div>
       </div>
   </div>
@@ -55,8 +65,8 @@ export const f1CardRenderer = (
           <div class="card font-jakarta" id="card--series-view">
             <div class="header">
                 <div class="content"> 
-                  <div class="round font-goldman">${round}</div>
-                  <div  class="dates">${dates}</div>
+                  <div class="round font-goldman">Round ${round}</div>
+                  <div  class="dates">${firstPractiseDate}-${day} ${month}</div>
                 </div>
             </div>
             <div class="body">
@@ -65,7 +75,7 @@ export const f1CardRenderer = (
                   <div class="name">${country}</div>
                 </div>
                 <div class="series">
-                  <div class="title font-goldman">${series}</div>
+                  <div class="title font-goldman">${raceName}</div>
                 </div>
             </div>
           </div>
@@ -76,12 +86,12 @@ export const viewPageRenderer = (pageData: any): Template => {
     return `
     <div class="view-page font-jakarta">
       <div>${navButtonsRenderer()}</div>
-      <div>${f1CardRenderer(pageData.cardData, false)}</div>
+      <div>${f1CardRenderer(pageData.raceData, false)}</div>
       <div class="column">
         <div class="winner">
           <div class="title">WINNER</div>
           <div class="details">
-            <div class="flag">FLAG</div>
+            <div class="flag"></div>
             <div class="name  font-goldman">${pageData.winner.name}</div>
             <div class="laps">${pageData.winner.laps} LAPS</div>
           </div>
