@@ -50,6 +50,10 @@ button {
     border: none;
 }
 
+button:hover {
+    cursor: pointer;
+}
+
 .full-width {
     height: 100%;
     width: 100%;

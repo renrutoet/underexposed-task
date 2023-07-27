@@ -5,6 +5,8 @@
 
     padding-block: 1rem;
     gap: 1rem;
+
+    animation: 0.5s ease-out 0s 1 slideInFromLeft;
 }
 
 .card {
@@ -22,6 +24,7 @@
 
     font-family: "Plus Jakarta Sans Variable", sans-serif;
     font-weight: 500;
+    transition: all 0.5s ease;
 
     .header {
         position: relative;
@@ -97,6 +100,12 @@
                 aspect-ratio: 1/1;
             }
         }
+    }
+}
+
+.card-list__container {
+    .card:hover {
+        transform: scale(1.05);
     }
 }
 
