@@ -130,4 +130,5 @@ button:hover {
 .hidden {
     height: 0px;
     border: none;
+    z-index: -1;
 }
