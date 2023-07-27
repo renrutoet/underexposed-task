@@ -1,10 +1,22 @@
+.card-list__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding-block: 1rem;
+    gap: 1rem;
+}
+
 .card {
-    height: 200px;
-    width: 300px;
+    height: 100%;
+    min-height: 10rem;
+    width: 90%;
+    padding-bottom: 1.5rem;
+
     border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    border-radius: 5px;
     border-top-left-radius: 0px;
-    border-bottom-left-radius: 25%;
+    border-bottom-left-radius: 40px;
     background-color: white;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 
@@ -13,9 +25,9 @@
 
     .header {
         position: relative;
-        border-bottom: 1px solid red;
+        border-bottom: 1px solid var(--primary-red);
         overflow: hidden;
-        color: red;
+        color: var(--primary-red);
 
         .skew-background {
             position: absolute;
@@ -24,7 +36,7 @@
             height: 100%;
             width: 100%;
             transform: skew(-45deg, 0deg);
-            background-color: red;
+            background-color: var(--primary-red);
         }
 
         .content {
@@ -48,6 +60,7 @@
         .country {
             display: flex;
             justify-content: flex-start;
+            align-items: center;
 
             .flag {
                 padding-right: 0.5rem;
@@ -55,15 +68,52 @@
 
             .name {
                 color: grey;
+                font-size: 0.8rem;
             }
         }
 
         .series {
             padding-top: 0.5rem;
+            font-size: 0.8rem;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            color: black;
 
             .title {
+                text-align: left;
+            }
+            .arrow-icon {
+                aspect-ratio: 1/1;
+            }
+        }
+    }
+}
+
+#card--series-view {
+    width: 100%;
+    padding-bottom: 0;
+    background-color: var(--primary-red);
+
+    .header {
+        color: var(--pure-white);
+        border-bottom: 1px solid var(--faded-white--20);
+    }
+
+    .body {
+        .country {
+            .name {
+                color: var(--pure-white);
+            }
+        }
+        .series {
+            padding-top: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .title {
+                font-size: 1.25rem;
+                color: var(--pure-white);
                 text-align: left;
             }
         }

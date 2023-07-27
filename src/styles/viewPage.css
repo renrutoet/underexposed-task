@@ -5,7 +5,8 @@
     width: 100%;
 
     & hr {
-        border-color: rgba(225, 5, 0, 0.2);
+        border: 0 solid #000;
+        border-bottom: 1px solid rgba(225, 5, 0, 0.2);
     }
 
     .column {
@@ -32,18 +33,19 @@
 
         text-align: left;
         font-size: 0.8rem;
-        color: rgba(0, 0, 0, 0.3);
+        color: var(--faded-black--30);
 
         list-style-position: outside;
 
         > ol {
             > li::marker {
-                color: red;
+                color: var(--primary-red);
                 width: 100px;
+                font-size: 1rem;
             }
             > li {
                 margin-left: 1rem;
-                color: black;
+                color: var(--pure-black);
                 > span {
                     margin-left: 0.25rem;
                     font-size: 1rem;
@@ -62,13 +64,13 @@
             gap: 0.75rem;
         }
     }
-}
 
-.title {
-    font-size: 0.7rem;
-    text-align: left;
-    color: rgba(0, 0, 0, 0.3);
-    margin-block: 0.25rem;
+    .title {
+        font-size: 0.7rem;
+        text-align: left;
+        color: var(--faded-black--30);
+        margin-block: 0.25rem;
+    }
 }
 
 .navbar {

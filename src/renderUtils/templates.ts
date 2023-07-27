@@ -24,14 +24,12 @@ export const templateToElement = (
     return convertStringToHTML(templateRenderer(data));
 };
 
-export const f1CardRenderer = ({
-    round,
-    dates,
-    flag,
-    country,
-    series,
-}: F1TemplateData): Template => {
-    return `
+export const f1CardRenderer = (
+    { round, dates, flag, country, series }: F1TemplateData,
+    forHomepage: boolean = true
+): Template => {
+    if (forHomepage) {
+        return `
 <div class="card font-jakarta">
   <div class="header">
       <div  class="skew-background"></div>
@@ -46,11 +44,31 @@ export const f1CardRenderer = ({
         <div class="name">${country}</div>
       </div>
       <div class="series">
-        <div class="title font-goldman"><strong>${series}</strong></div>
-        <div class="arrow-icon">ARROW</div>
+        <div class="title font-goldman">${series}</div>
+        <div class="arrow-icon"><img  src="./arrow-circle.svg" alt="arrow icon"/></div>
       </div>
   </div>
 </div>
+    ` as Template;
+    }
+    return `
+          <div class="card font-jakarta" id="card--series-view">
+            <div class="header">
+                <div class="content"> 
+                  <div class="round font-goldman">${round}</div>
+                  <div  class="dates">${dates}</div>
+                </div>
+            </div>
+            <div class="body">
+                <div class="country">
+                  <div class="flag">${flag}</div>
+                  <div class="name">${country}</div>
+                </div>
+                <div class="series">
+                  <div class="title font-goldman">${series}</div>
+                </div>
+            </div>
+          </div>
     ` as Template;
 };
 
@@ -58,7 +76,7 @@ export const viewPageRenderer = (pageData: any): Template => {
     return `
     <div class="view-page font-jakarta">
       <div>${navButtonsRenderer()}</div>
-      <div>${f1CardRenderer(pageData.cardData)}</div>
+      <div>${f1CardRenderer(pageData.cardData, false)}</div>
       <div class="column">
         <div class="winner">
           <div class="title">WINNER</div>

@@ -8,15 +8,18 @@ import {
 } from "./templates";
 
 export const renderApp = (): any => {
-    console.log("rendering");
     const containerElement = document.createElement("div");
     containerElement.classList.add("full-width");
     const renderCards = renderCardList(testData);
+    const cardListContainerElement = document.createElement("div");
+    cardListContainerElement.classList.add("card-list__container");
 
     containerElement.appendChild(templateToElement(pageHeaderRenderer));
     renderCards.forEach((card) => {
-        containerElement.appendChild(card);
+        cardListContainerElement.appendChild(card);
     });
+
+    containerElement.appendChild(cardListContainerElement);
 
     document
         .querySelector<HTMLDivElement>("#app")!

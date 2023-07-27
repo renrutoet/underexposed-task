@@ -2,6 +2,14 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+
+    --pure-white: #fff;
+    --pure-black: #000;
+    --primary-red: #e10500;
+    --faded-black--10: rgba(0, 0, 0, 0.1);
+    --faded-black--30: rgba(0, 0, 0, 0.3);
+    --faded-black--50: rgba(0, 0, 0, 0.5);
+    --faded-white--20: rgba(255, 255, 255, 0.2);
 }
 
 :root {
@@ -11,7 +19,6 @@
     font-weight: 400;
 
     color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
     background-color: white;
 
     font-synthesis: none;
@@ -58,7 +65,7 @@ button {
 }
 
 .card {
-    border: 2px solid red;
+    border: 2px solid var(--primary-red);
     border-radius: 20px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 50%;
@@ -69,8 +76,8 @@ button {
     justify-content: space-between;
     align-items: center;
 
-    background-color: red;
+    background-color: var(--primary-red);
     padding: 1rem;
 
-    color: white;
+    color: var(--pure-white);
 }
