@@ -61,6 +61,16 @@ const renderViewPage = async (raceData: any): Promise<void> => {
         renderApp();
     });
 
+    document
+        .querySelector("#next-button")
+        ?.addEventListener("click", async () => {
+            const seasonData = await getSeasonData(raceData.season);
+            const nextRound = seasonData.Races[raceData.round];
+            if (nextRound) {
+                await renderViewPage(nextRound);
+            }
+        });
+
     window.scrollTo(0, 0);
 };
 
