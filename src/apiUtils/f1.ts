@@ -1,3 +1,66 @@
+export interface F1Response {
+    MRData: {
+        RaceTable: RaceTable;
+    };
+}
+
+export interface RaceTable {
+    season: string;
+    Races: Race[];
+}
+
+export interface RaceResultsTable {
+    season: string;
+    round: string;
+    Races: RaceResults[];
+}
+
+export interface Race {
+    season: string;
+    round: string;
+    raceName: string;
+    Circuit: {
+        circuitName: string;
+        Location: {
+            country: string;
+        };
+    };
+    date: string;
+    FirstPractise: {
+        date: string;
+        time: string;
+    };
+}
+
+export interface RaceResults extends Race {
+    Results: {
+        number: string;
+        postition: string;
+        Driver: {
+            givenName: string;
+            familyName: string;
+            nationality: string;
+        };
+        laps: string;
+        FastestLap: {
+            rank: string;
+            Time: {
+                time: string;
+            };
+        };
+    }[];
+}
+
+export interface WinnerDetails {
+    winner: {
+        name: string;
+        laps: string;
+        nationality: string;
+    };
+    top: string[];
+    lap: { time: string | undefined; name: string };
+}
+
 export const getSeasonData = async (seasonYear = "2022") => {
     let seasonData = sessionStorage.getItem(`season-${seasonYear}`);
 
@@ -20,7 +83,7 @@ export const getSeasonData = async (seasonYear = "2022") => {
     }
 };
 
-export const getRoundResults = async (raceData) => {
+export const getRoundResults = async (raceData: Race) => {
     const sessionKey = `${raceData.season}-round-${raceData.round}`;
     let roundData = sessionStorage.getItem(sessionKey);
 
@@ -40,7 +103,7 @@ export const getRoundResults = async (raceData) => {
     }
 };
 
-export const getFastestLapTime = async (roundResults) => {
+export const getFastestLapTime = async (roundResults: RaceResultsTable) => {
     const sessionKey = `${roundResults.season}-round-${roundResults.round}-fastest-time`;
     let roundData = sessionStorage.getItem(sessionKey);
 
@@ -60,7 +123,9 @@ export const getFastestLapTime = async (roundResults) => {
     }
 };
 
-export const getPageDetails = async (roundResults: Record<string, any>) => {
+export const getPageDetails = async (
+    roundResults: RaceResultsTable
+): Promise<WinnerDetails> => {
     const top3Results = roundResults.Races[0].Results.slice(0, 3);
 
     const top3Copy = [...top3Results];
@@ -77,9 +142,9 @@ export const getPageDetails = async (roundResults: Record<string, any>) => {
         fastestResult = await getFastestLapTime(roundResults);
     }
 
-    const fastestTime = fastestResult.FastestLap.Time.time;
-    const fastestDriver = fastestResult.Driver;
-    const fastestName = `${fastestDriver.givenName} ${fastestDriver.familyName}`;
+    const fastestTime = fastestResult?.FastestLap?.Time?.time;
+    const fastestDriver = fastestResult?.Driver;
+    const fastestName = `${fastestDriver?.givenName} ${fastestDriver?.familyName}`;
 
     return {
         winner: {

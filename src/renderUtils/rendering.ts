@@ -1,4 +1,10 @@
-import { getPageDetails, getRoundResults, getSeasonData } from "../apiUtils/f1";
+import {
+    Race,
+    WinnerDetails,
+    getPageDetails,
+    getRoundResults,
+    getSeasonData,
+} from "../apiUtils/f1";
 import {
     getCountryFlag,
     getCurrentCountryCode,
@@ -39,7 +45,7 @@ export const renderApp = async (seasonYear = "2022"): Promise<void> => {
         .replaceChildren(containerElement);
 };
 
-const renderViewPage = async (raceData: any): Promise<void> => {
+const renderViewPage = async (raceData: Race): Promise<void> => {
     const roundResults = await getRoundResults(raceData);
 
     const details = await getPageDetails(roundResults);
@@ -71,7 +77,7 @@ const renderViewPage = async (raceData: any): Promise<void> => {
 
     document
         .querySelector("#next-button")
-        ?.addEventListener("click", async () => {
+        ?.addEventListener("click", async (): Promise<void> => {
             const seasonData = await getSeasonData(raceData.season);
             const nextRound = seasonData.Races[raceData.round];
             if (nextRound) {
@@ -82,12 +88,12 @@ const renderViewPage = async (raceData: any): Promise<void> => {
     window.scrollTo(0, 0);
 };
 
-export const renderCard = async (raceData) => {
+export const renderCard = async (raceData: Race) => {
     const newCardElement = templateToElement(f1CardRenderer, raceData);
 
     await updateCardWithFlag(newCardElement, raceData);
 
-    newCardElement.addEventListener("click", async () => {
+    newCardElement.addEventListener("click", async (): Promise<void> => {
         await renderViewPage(raceData);
     });
     return newCardElement;
@@ -95,32 +101,42 @@ export const renderCard = async (raceData) => {
 
 export const renderCardList = async (seasonData: any): Promise<any[]> => {
     const result = await Promise.all(
-        seasonData.Races.map(async (raceData) => {
+        seasonData.Races.map(async (raceData: Race) => {
             return await renderCard(raceData);
         })
     );
     return result;
 };
 
-export const updateCardWithFlag = async (cardElement, raceData) => {
+export const updateCardWithFlag = async (
+    cardElement: HTMLElement,
+    raceData: Race
+) => {
     const currentCountryCode = await getCurrentCountryCode(
         raceData.Circuit.Location.country
     );
-    const countryFlag = await getCountryFlag(currentCountryCode);
+    const countryFlag =
+        currentCountryCode &&
+        ((await getCountryFlag(currentCountryCode)) as HTMLElement);
 
     const flagElement = cardElement.querySelector(".flag");
 
-    const hasViewbox = countryFlag?.getAttribute("viewBox");
-    if (!hasViewbox && countryFlag) {
-        countryFlag?.setAttribute("viewBox", "0 0 900 600");
-    }
+    if (countryFlag) {
+        const hasViewbox = countryFlag?.getAttribute("viewBox");
+        if (!hasViewbox) {
+            countryFlag?.setAttribute("viewBox", "0 0 900 600");
+        }
 
-    if (flagElement) {
-        !flagElement.appendChild(countryFlag);
+        if (flagElement) {
+            !flagElement.appendChild(countryFlag);
+        }
     }
 };
 
-export const updateWinnerWithFlag = async (targetElement, winnerDetails) => {
+export const updateWinnerWithFlag = async (
+    targetElement: HTMLElement,
+    winnerDetails: WinnerDetails
+) => {
     nationalities.registerLocale(english);
 
     const winnerNationality = winnerDetails.winner.nationality;
@@ -133,11 +149,13 @@ export const updateWinnerWithFlag = async (targetElement, winnerDetails) => {
         winnerCountryCode = "mc";
     }
 
-    const countryFlag = await getCountryFlag(winnerCountryCode.toLowerCase());
+    const countryFlag = (await getCountryFlag(
+        winnerCountryCode.toLowerCase()
+    )) as HTMLElement;
 
     const flagElement = targetElement
-        .querySelector(".winner")
-        .querySelector(".flag");
+        ?.querySelector(".winner")
+        ?.querySelector(".flag");
 
     const hasViewbox = countryFlag?.getAttribute("viewBox");
     if (!hasViewbox && countryFlag) {
@@ -145,18 +163,20 @@ export const updateWinnerWithFlag = async (targetElement, winnerDetails) => {
     }
 
     if (flagElement) {
-        !flagElement.appendChild(countryFlag);
+        flagElement.appendChild(countryFlag);
     }
 };
 
-const updateHeaderFunctionality = (targetElement) => {
+const updateHeaderFunctionality = (targetElement: HTMLElement) => {
     const seasonButton = targetElement.querySelector("#season-button");
     const search = targetElement.querySelector(".search__container");
 
     seasonButton?.addEventListener("click", () => {
         search?.classList.toggle("hidden");
         const headerElement = document.querySelector("#header__container");
-        const searchInput = headerElement?.querySelector(".search__input");
+        const searchInput = headerElement?.querySelector(
+            ".search__input"
+        ) as HTMLInputElement;
         const searchButton = headerElement?.querySelector(".search__button");
 
         searchInput?.classList.toggle("hidden");

@@ -49,20 +49,20 @@ export const getCountryFlag = async (countryCode: string) => {
     }
 };
 
-export const getCurrentCountryCode = async (currentCountryName) => {
+export const getCurrentCountryCode = async (
+    currentCountryName: string
+): Promise<string | undefined> => {
     const countryCodes = await getFlagCountryCodes();
 
-    const edgeCaseCodes = { ...countryCodes, ae: "UAE", us: "USA", gb: "UK" };
+    const edgeCaseCodes = { ae: "UAE", us: "USA", gb: "UK" };
 
-    let currentCountry = Object.entries(edgeCaseCodes).find((key) => {
+    const completeCodes = { ...countryCodes, ...edgeCaseCodes };
+
+    let currentCountry = Object.entries(completeCodes).find((key) => {
         return key[1] === currentCountryName;
     });
 
-    if (!currentCountry[0]) {
-        currentCountry = Object.entries(countryCodes).find((key) => {
-            return key[1] === currentCountryName;
-        });
+    if (currentCountry) {
+        return currentCountry[0];
     }
-
-    return currentCountry[0];
 };

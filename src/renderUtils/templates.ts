@@ -136,7 +136,7 @@ export const viewPageRenderer = (pageData: any): Template => {
         ` as Template;
 };
 
-export const pageHeaderRenderer = (seasonYear): Template => {
+export const pageHeaderRenderer = (seasonYear: string): Template => {
     return `
     <div id="header__container">
       <div class="page__header font-goldman">
