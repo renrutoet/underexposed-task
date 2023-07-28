@@ -110,6 +110,11 @@ export const updateCardWithFlag = async (cardElement, raceData) => {
 
     const flagElement = cardElement.querySelector(".flag");
 
+    const hasViewbox = countryFlag?.getAttribute("viewBox");
+    if (!hasViewbox && countryFlag) {
+        countryFlag?.setAttribute("viewBox", "0 0 900 600");
+    }
+
     if (flagElement) {
         !flagElement.appendChild(countryFlag);
     }
@@ -133,6 +138,11 @@ export const updateWinnerWithFlag = async (targetElement, winnerDetails) => {
     const flagElement = targetElement
         .querySelector(".winner")
         .querySelector(".flag");
+
+    const hasViewbox = countryFlag?.getAttribute("viewBox");
+    if (!hasViewbox && countryFlag) {
+        countryFlag?.setAttribute("viewBox", "0 0 900 600");
+    }
 
     if (flagElement) {
         !flagElement.appendChild(countryFlag);
