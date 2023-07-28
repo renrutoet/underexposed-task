@@ -83,6 +83,9 @@ export const f1CardRenderer = (
 };
 
 export const viewPageRenderer = (pageData: any): Template => {
+    const circuitName = pageData.raceData.Circuit.circuitName;
+    const locationParam = encodeURI(circuitName);
+
     return `
     <div class="view-page font-jakarta">
       <div>${navButtonsRenderer()}</div>
@@ -116,6 +119,18 @@ export const viewPageRenderer = (pageData: any): Template => {
           </div>
         </div>
         <hr>
+        <div>
+          <div class="title">Map</div>
+          <div class="map__container">
+            <iframe
+              width="325"
+              height="250"
+              frameborder="0" style="border-radius:5px; box-shadow:  0px 4px 4px 0px rgba(0, 0, 0, 0.25);"
+              src="https://www.google.com/maps/embed/v1/place?q=${locationParam}&key=AIzaSyDTU-Sbv-rp_Jr7uyKiJwH8KRRbxuvWYhM"
+              >
+            </iframe>
+          </div>
+        </div>
         </div>
     </div>
         ` as Template;
